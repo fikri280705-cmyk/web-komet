@@ -97,10 +97,10 @@
                     <table class="data-table table-compact">
                         <thead>
                             <tr>
-                                <th style="width: 38%;">Judul</th>
-                                <th style="width: 24%;">Pengusul</th>
-                                <th style="width: 22%;">Kategori</th>
-                                <th style="width: 16%; text-align: center;">Status</th>
+                                <th style="width: 42%;">Judul</th>
+                                <th style="width: 28%;">Pengusul</th>
+                                <th class="col-hide-sm" style="width: 18%;">Kategori</th>
+                                <th style="width: 12%; text-align: center;">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -113,7 +113,7 @@
                                         </div>
                                     </td>
                                     <td title="<?= e($evt['nama_pengusul']) ?>"><?= e($evt['nama_pengusul']) ?></td>
-                                    <td><span class="badge badge-info" title="<?= e($evt['nama_kategori']) ?>"><?= e($evt['nama_kategori']) ?></span></td>
+                                    <td class="col-hide-sm"><span class="badge badge-info" title="<?= e($evt['nama_kategori']) ?>"><?= e($evt['nama_kategori']) ?></span></td>
                                     <td style="text-align: center;">
                                         <span class="badge badge-warning">Review</span>
                                     </td>
@@ -144,9 +144,9 @@
                 <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th style="width: 18%;">Kode</th>
-                            <th style="width: 44%;">Konsentrasi</th>
-                            <th style="width: 38%;">Kaprog</th>
+                            <th style="width: 16%;">Kode</th>
+                            <th style="width: 48%;">Konsentrasi</th>
+                            <th class="col-hide-sm" style="width: 36%;">Kaprog</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -156,7 +156,7 @@
                                     <span class="badge badge-primary" style="font-weight: 800;"><?= e($jur['kode_jurusan']) ?></span>
                                 </td>
                                 <td style="font-weight: 700; color: var(--color-text-main);" title="<?= e($jur['nama_jurusan']) ?>"><?= e($jur['nama_jurusan']) ?></td>
-                                <td style="color: var(--color-secondary); font-weight: 600;" title="<?= e($jur['nama_kaprog'] ?? 'Belum ditentukan') ?>">
+                                <td class="col-hide-sm" style="color: var(--color-secondary); font-weight: 600;" title="<?= e($jur['nama_kaprog'] ?? 'Belum ditentukan') ?>">
                                     <?= e($jur['nama_kaprog'] ?? 'Belum ditentukan') ?>
                                 </td>
                             </tr>
@@ -186,15 +186,15 @@
                 <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th style="width: 28%;">NUPTK</th>
-                            <th style="width: 40%;">Nama Guru</th>
-                            <th style="width: 32%;">Mapel</th>
+                            <th class="col-hide-sm" style="width: 26%;">NUPTK</th>
+                            <th style="width: 48%;">Nama Guru</th>
+                            <th style="width: 26%;">Mapel</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($previewGuru as $g): ?>
                             <tr>
-                                <td style="font-family: monospace; font-weight: 600; color: var(--color-text-muted);" title="<?= e($g['nuptk']) ?>">
+                                <td class="col-hide-sm" style="font-family: monospace; font-weight: 600; color: var(--color-text-muted);" title="<?= e($g['nuptk']) ?>">
                                     <?= e($g['nuptk']) ?>
                                 </td>
                                 <td>
@@ -231,16 +231,16 @@
                 <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th style="width: 24%;">NIS</th>
-                            <th style="width: 38%;">Nama Siswa</th>
-                            <th style="width: 22%;">Kelas</th>
-                            <th style="width: 16%;">Jurusan</th>
+                            <th class="col-hide-sm" style="width: 22%;">NIS</th>
+                            <th style="width: 46%;">Nama Siswa</th>
+                            <th style="width: 20%;">Kelas</th>
+                            <th style="width: 12%;">Jurusan</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($previewSiswa as $s): ?>
                             <tr>
-                                <td style="font-family: monospace; font-weight: 700; color: var(--color-primary);" title="<?= e($s['nis']) ?>">
+                                <td class="col-hide-sm" style="font-family: monospace; font-weight: 700; color: var(--color-primary);" title="<?= e($s['nis']) ?>">
                                     <?= e($s['nis']) ?>
                                 </td>
                                 <td>

@@ -411,6 +411,14 @@ body {
     width: 100%;
     margin: 0 auto;
     min-width: 0;
+    overflow-x: hidden;
+}
+
+.page-content .card,
+.page-content .grid-2,
+.page-content .grid-4 {
+    max-width: 100%;
+    min-width: 0;
 }
 
 .page-header {
