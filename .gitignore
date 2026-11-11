@@ -1,0 +1,27 @@
+# Logs & runtime
+/logs/*.log
+/logs/*.tmp
+!/logs/.gitkeep
+
+# Uploads user-generated (keep folder structure)
+/public/uploads/**/*
+!/public/uploads/**/.htaccess
+!/public/uploads/**/.gitkeep
+
+# Local / IDE
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+Desktop.ini
+
+# Temp scripts
+/tmp_*.php
+/tmp_*.sql
+*.tmp
+
+# OS
+.DS_Store
