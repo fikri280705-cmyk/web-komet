@@ -21,19 +21,20 @@ class OsisController extends Controller {
     }
 
     public function dashboard(): void {
-        $idPengguna = Session::get('pengguna_id');
-        $eventSaya = $this->modelEvent->ambilEventSaya($idPengguna);
+        // Samakan dengan halaman kelola event: tampilkan semua event (termasuk
+        // yang sudah diproses/disetujui Kesiswaan), bukan hanya milik akun login.
+        $daftarEvent = $this->modelEvent->ambilSemua();
         $pengurusOsis = $this->modelOsis->ambilSemuaPengurus();
 
-        $draf = array_filter($eventSaya, fn($e) => $e['status'] === 'draf');
-        $pending = array_filter($eventSaya, fn($e) => $e['status'] === 'menunggu_persetujuan');
-        $published = array_filter($eventSaya, fn($e) => $e['status'] === 'dipublikasikan');
-        $archived = array_filter($eventSaya, fn($e) => $e['status'] === 'diarsipkan');
+        $draf = array_filter($daftarEvent, fn($e) => $e['status'] === 'draf');
+        $pending = array_filter($daftarEvent, fn($e) => $e['status'] === 'menunggu_persetujuan');
+        $published = array_filter($daftarEvent, fn($e) => $e['status'] === 'dipublikasikan');
+        $archived = array_filter($daftarEvent, fn($e) => $e['status'] === 'diarsipkan');
 
         $data = [
             'judulHalaman' => 'Pusat Event & Mading OSIS - SMKN 9 Kabupaten Tangerang',
             'user'         => Session::user(),
-            'eventSaya'    => $eventSaya,
+            'eventSaya'    => $daftarEvent,
             'pengurusOsis' => array_slice($pengurusOsis, 0, 5),
             'totalDraf'    => count($draf),
             'totalPending' => count($pending),
