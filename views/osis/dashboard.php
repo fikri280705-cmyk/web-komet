@@ -101,22 +101,24 @@
                 </div>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="data-table">
+                    <table class="data-table table-compact">
                         <thead>
                             <tr>
-                                <th>Judul Kegiatan</th>
-                                <th>Kategori</th>
-                                <th style="text-align: center;">Status</th>
+                                <th style="width: 48%;">Judul</th>
+                                <th class="col-hide-sm" style="width: 28%;">Kategori</th>
+                                <th style="width: 24%; text-align: center;">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach (array_slice($eventSaya, 0, 5) as $evt): ?>
                                 <tr>
                                     <td>
-                                        <div style="font-weight: 700; color: var(--color-text-main); font-size: 13px;"><?= e($evt['judul']) ?></div>
-                                        <div style="font-size: 11px; color: var(--color-text-muted);">📍 <?= e($evt['lokasi']) ?></div>
+                                        <div class="cell-stack">
+                                            <div style="font-weight: 700; color: var(--color-text-main);" title="<?= e($evt['judul']) ?>"><?= e($evt['judul']) ?></div>
+                                            <div style="color: var(--color-text-muted);" title="<?= e($evt['lokasi']) ?>"><?= e($evt['lokasi']) ?></div>
+                                        </div>
                                     </td>
-                                    <td><span class="badge badge-info"><?= e($evt['nama_kategori']) ?></span></td>
+                                    <td class="col-hide-sm"><span class="badge badge-info" title="<?= e($evt['nama_kategori']) ?>"><?= e($evt['nama_kategori']) ?></span></td>
                                     <td style="text-align: center;"><?= \App\Helpers\Sanitizer::badgeStatus($evt['status']) ?></td>
                                 </tr>
                             <?php endforeach; ?>
@@ -141,26 +143,28 @@
         </div>
         <div class="card-body" style="padding: 0;">
             <div class="table-responsive">
-                <table class="data-table">
+                <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th>Jabatan</th>
-                            <th>Nama Siswa</th>
-                            <th>Kelas</th>
+                            <th style="width: 30%;">Jabatan</th>
+                            <th style="width: 48%;">Nama Siswa</th>
+                            <th style="width: 22%;">Kelas</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($pengurusOsis as $po): ?>
                             <tr>
                                 <td>
-                                    <span class="badge badge-primary" style="font-weight: 700;"><?= e($po['jabatan']) ?></span>
+                                    <span class="badge badge-primary" style="font-weight: 700;" title="<?= e($po['jabatan']) ?>"><?= e($po['jabatan']) ?></span>
                                 </td>
                                 <td>
-                                    <div style="font-weight: 700; color: var(--color-text-main);"><?= e($po['nama_lengkap']) ?></div>
-                                    <div style="font-size: 11px; color: var(--color-text-muted);">NIS: <?= e($po['nis']) ?></div>
+                                    <div class="cell-stack">
+                                        <div style="font-weight: 700; color: var(--color-text-main);" title="<?= e($po['nama_lengkap']) ?>"><?= e($po['nama_lengkap']) ?></div>
+                                        <div style="color: var(--color-text-muted);">NIS: <?= e($po['nis']) ?></div>
+                                    </div>
                                 </td>
                                 <td>
-                                    <span class="badge badge-neutral"><?= e($po['nama_kelas'] ?? '-') ?></span>
+                                    <span class="badge badge-neutral" title="<?= e($po['nama_kelas'] ?? '-') ?>"><?= e($po['nama_kelas'] ?? '-') ?></span>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

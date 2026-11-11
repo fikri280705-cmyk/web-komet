@@ -77,26 +77,23 @@
         </div>
         <div class="card-body" style="padding: 0;">
             <div class="table-responsive">
-                <table class="data-table">
+                <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th>Tingkat</th>
-                            <th>Nama Kelas</th>
-                            <th style="text-align: center;">Status</th>
+                            <th style="width: 28%;">Tingkat</th>
+                            <th style="width: 44%;">Nama Kelas</th>
+                            <th style="width: 28%; text-align: center;">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($daftarKelas as $k): ?>
                             <tr>
                                 <td>
-                                    <span class="badge badge-neutral">Tingkat <?= e($k['tingkat']) ?></span>
+                                    <span class="badge badge-neutral">Tkt <?= e($k['tingkat']) ?></span>
                                 </td>
-                                <td style="font-weight: 700; color: var(--color-primary); font-size: 14px;"><?= e($k['nama_kelas']) ?></td>
+                                <td style="font-weight: 700; color: var(--color-primary);" title="<?= e($k['nama_kelas']) ?>"><?= e($k['nama_kelas']) ?></td>
                                 <td style="text-align: center;">
-                                    <span class="badge badge-success">
-                                        <span class="badge-dot"></span>
-                                        Aktif
-                                    </span>
+                                    <span class="badge badge-success">Aktif</span>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -125,31 +122,35 @@
                 </div>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="data-table">
+                    <table class="data-table table-compact">
                         <thead>
                             <tr>
-                                <th>Hari & Waktu</th>
-                                <th>Kelas</th>
-                                <th>Mata Pelajaran & Guru</th>
-                                <th>Ruangan / Fasilitas</th>
+                                <th style="width: 24%;">Hari & Jam</th>
+                                <th style="width: 18%;">Kelas</th>
+                                <th style="width: 38%;">Mapel & Guru</th>
+                                <th class="col-hide-sm" style="width: 20%;">Ruangan</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($jadwalJurusan as $jdw): ?>
                                 <tr>
                                     <td>
-                                        <div style="font-weight: 700; color: var(--color-text-main);"><?= e($jdw['hari']) ?></div>
-                                        <div style="font-size: 11px; color: var(--color-text-muted); font-family: monospace;">
-                                            <?= \App\Helpers\Sanitizer::formatJam($jdw['jam_mulai']) ?> - <?= \App\Helpers\Sanitizer::formatJam($jdw['jam_selesai']) ?>
+                                        <div class="cell-stack">
+                                            <div style="font-weight: 700; color: var(--color-text-main);"><?= e($jdw['hari']) ?></div>
+                                            <div style="color: var(--color-text-muted); font-family: monospace;">
+                                                <?= \App\Helpers\Sanitizer::formatJam($jdw['jam_mulai']) ?>-<?= \App\Helpers\Sanitizer::formatJam($jdw['jam_selesai']) ?>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td><span class="badge badge-primary"><?= e($jdw['nama_kelas']) ?></span></td>
+                                    <td><span class="badge badge-primary" title="<?= e($jdw['nama_kelas']) ?>"><?= e($jdw['nama_kelas']) ?></span></td>
                                     <td>
-                                        <div style="font-weight: 700; color: var(--color-text-main);"><?= e($jdw['nama_mapel']) ?></div>
-                                        <div style="font-size: 11.5px; color: var(--color-secondary);"><?= e($jdw['nama_guru']) ?></div>
+                                        <div class="cell-stack">
+                                            <div style="font-weight: 700; color: var(--color-text-main);" title="<?= e($jdw['nama_mapel']) ?>"><?= e($jdw['nama_mapel']) ?></div>
+                                            <div style="color: var(--color-secondary);" title="<?= e($jdw['nama_guru']) ?>"><?= e($jdw['nama_guru']) ?></div>
+                                        </div>
                                     </td>
-                                    <td>
-                                        <span class="badge badge-neutral"><?= e($jdw['ruangan'] ?? 'Ruang Teori') ?></span>
+                                    <td class="col-hide-sm">
+                                        <span class="badge badge-neutral" title="<?= e($jdw['ruangan'] ?? 'Ruang Teori') ?>"><?= e($jdw['ruangan'] ?? 'Ruang Teori') ?></span>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -176,25 +177,23 @@
         </div>
         <div class="card-body" style="padding: 0;">
             <div class="table-responsive">
-                <table class="data-table">
+                <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th>NIS</th>
-                            <th>Nama Siswa</th>
-                            <th>Kelas</th>
+                            <th class="col-hide-sm" style="width: 28%;">NIS</th>
+                            <th style="width: 48%;">Nama Siswa</th>
+                            <th style="width: 24%;">Kelas</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($previewSiswa as $s): ?>
                             <tr>
-                                <td style="font-family: monospace; font-weight: 700; color: var(--color-primary); font-size: 12.5px;">
+                                <td class="col-hide-sm" style="font-family: monospace; font-weight: 700; color: var(--color-primary);" title="<?= e($s['nis']) ?>">
                                     <?= e($s['nis']) ?>
                                 </td>
+                                <td style="font-weight: 700; color: var(--color-text-main);" title="<?= e($s['nama_lengkap']) ?>"><?= e($s['nama_lengkap']) ?></td>
                                 <td>
-                                    <div style="font-weight: 700; color: var(--color-text-main);"><?= e($s['nama_lengkap']) ?></div>
-                                </td>
-                                <td>
-                                    <span class="badge badge-info"><?= e($s['nama_kelas'] ?? '-') ?></span>
+                                    <span class="badge badge-info" title="<?= e($s['nama_kelas'] ?? '-') ?>"><?= e($s['nama_kelas'] ?? '-') ?></span>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -218,26 +217,28 @@
         </div>
         <div class="card-body" style="padding: 0;">
             <div class="table-responsive">
-                <table class="data-table">
+                <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th>NUPTK</th>
-                            <th>Nama Guru</th>
-                            <th>Mata Pelajaran</th>
+                            <th class="col-hide-sm" style="width: 26%;">NUPTK</th>
+                            <th style="width: 46%;">Nama Guru</th>
+                            <th style="width: 28%;">Mapel</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($previewGuru as $g): ?>
                             <tr>
-                                <td style="font-family: monospace; font-weight: 600; color: var(--color-text-muted); font-size: 12.5px;">
+                                <td class="col-hide-sm" style="font-family: monospace; font-weight: 600; color: var(--color-text-muted);" title="<?= e($g['nuptk']) ?>">
                                     <?= e($g['nuptk']) ?>
                                 </td>
                                 <td>
-                                    <div style="font-weight: 700; color: var(--color-text-main);"><?= e($g['nama_lengkap']) ?></div>
-                                    <div style="font-size: 11px; color: var(--color-primary);"><?= e($g['nama_peran'] ?? 'Guru') ?></div>
+                                    <div class="cell-stack">
+                                        <div style="font-weight: 700; color: var(--color-text-main);" title="<?= e($g['nama_lengkap']) ?>"><?= e($g['nama_lengkap']) ?></div>
+                                        <div style="color: var(--color-primary);" title="<?= e($g['nama_peran'] ?? 'Guru') ?>"><?= e($g['nama_peran'] ?? 'Guru') ?></div>
+                                    </div>
                                 </td>
                                 <td>
-                                    <span class="badge badge-neutral"><?= e($g['mapel_utama'] ?? 'Umum') ?></span>
+                                    <span class="badge badge-neutral" title="<?= e($g['mapel_utama'] ?? 'Umum') ?>"><?= e($g['mapel_utama'] ?? 'Umum') ?></span>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

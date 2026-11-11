@@ -80,26 +80,28 @@
                 </div>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="data-table">
+                    <table class="data-table table-compact">
                         <thead>
                             <tr>
-                                <th>Mata Pelajaran</th>
-                                <th style="text-align: center;">Nilai Akhir</th>
-                                <th style="text-align: center;">Predikat</th>
+                                <th style="width: 58%;">Mata Pelajaran</th>
+                                <th style="width: 22%; text-align: center;">Nilai</th>
+                                <th style="width: 20%; text-align: center;">Predikat</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($nilaiFinal as $nf): ?>
                                 <tr>
                                     <td>
-                                        <div style="font-weight: 700; color: var(--color-text-main); font-size: 13px;"><?= e($nf['nama_mapel']) ?></div>
-                                        <div style="font-size: 11px; color: var(--color-text-muted);"><?= e($nf['nama_guru_pengajar']) ?></div>
+                                        <div class="cell-stack">
+                                            <div style="font-weight: 700; color: var(--color-text-main);" title="<?= e($nf['nama_mapel']) ?>"><?= e($nf['nama_mapel']) ?></div>
+                                            <div style="color: var(--color-text-muted);" title="<?= e($nf['nama_guru_pengajar']) ?>"><?= e($nf['nama_guru_pengajar']) ?></div>
+                                        </div>
                                     </td>
-                                    <td style="text-align: center; font-weight: 800; color: var(--color-primary); font-size: 14px;">
+                                    <td style="text-align: center; font-weight: 800; color: var(--color-primary);">
                                         <?= number_format($nf['nilai_akhir'], 1) ?>
                                     </td>
                                     <td style="text-align: center;">
-                                        <span class="badge <?= in_array($nf['predikat_huruf'], ['A', 'B']) ? 'badge-success' : 'badge-warning' ?>" style="font-weight: 800; font-size: 12px;">
+                                        <span class="badge <?= in_array($nf['predikat_huruf'], ['A', 'B']) ? 'badge-success' : 'badge-warning' ?>" style="font-weight: 800;">
                                             <?= e($nf['predikat_huruf']) ?>
                                         </span>
                                     </td>
@@ -133,29 +135,33 @@
                 </div>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="data-table">
+                    <table class="data-table table-compact">
                         <thead>
                             <tr>
-                                <th>Hari & Jam</th>
-                                <th>Mata Pelajaran</th>
-                                <th>Ruangan</th>
+                                <th style="width: 28%;">Hari & Jam</th>
+                                <th style="width: 48%;">Mapel</th>
+                                <th class="col-hide-sm" style="width: 24%;">Ruangan</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($jadwalKelas as $jdw): ?>
                                 <tr>
                                     <td>
-                                        <div style="font-weight: 700; color: var(--color-text-main); font-size: 13px;"><?= e($jdw['hari']) ?></div>
-                                        <div style="font-size: 11px; color: var(--color-text-muted); font-family: monospace;">
-                                            <?= substr($jdw['jam_mulai'], 0, 5) ?> - <?= substr($jdw['jam_selesai'], 0, 5) ?>
+                                        <div class="cell-stack">
+                                            <div style="font-weight: 700; color: var(--color-text-main);"><?= e($jdw['hari']) ?></div>
+                                            <div style="color: var(--color-text-muted); font-family: monospace;">
+                                                <?= substr($jdw['jam_mulai'], 0, 5) ?>-<?= substr($jdw['jam_selesai'], 0, 5) ?>
+                                            </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div style="font-weight: 700; color: var(--color-text-main); font-size: 13px;"><?= e($jdw['nama_mapel']) ?></div>
-                                        <div style="font-size: 11px; color: var(--color-text-muted);"><?= e($jdw['nama_guru']) ?></div>
+                                        <div class="cell-stack">
+                                            <div style="font-weight: 700; color: var(--color-text-main);" title="<?= e($jdw['nama_mapel']) ?>"><?= e($jdw['nama_mapel']) ?></div>
+                                            <div style="color: var(--color-text-muted);" title="<?= e($jdw['nama_guru']) ?>"><?= e($jdw['nama_guru']) ?></div>
+                                        </div>
                                     </td>
-                                    <td>
-                                        <span class="badge badge-neutral"><?= e($jdw['ruangan']) ?></span>
+                                    <td class="col-hide-sm">
+                                        <span class="badge badge-neutral" title="<?= e($jdw['ruangan']) ?>"><?= e($jdw['ruangan']) ?></span>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

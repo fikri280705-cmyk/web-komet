@@ -73,26 +73,22 @@
         </div>
         <div class="card-body" style="padding: 0;">
             <div class="table-responsive">
-                <table class="data-table">
+                <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th>NIS</th>
-                            <th>Nama Siswa</th>
-                            <th>Jenis Kelamin</th>
+                            <th class="col-hide-sm" style="width: 28%;">NIS</th>
+                            <th style="width: 48%;">Nama Siswa</th>
+                            <th style="width: 24%;">JK</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($previewSiswa as $s): ?>
                             <tr>
-                                <td style="font-family: monospace; font-weight: 700; color: var(--color-primary); font-size: 13px;">
+                                <td class="col-hide-sm" style="font-family: monospace; font-weight: 700; color: var(--color-primary);" title="<?= e($s['nis']) ?>">
                                     <?= e($s['nis']) ?>
                                 </td>
-                                <td>
-                                    <div style="font-weight: 700; color: var(--color-text-main);"><?= e($s['nama_lengkap']) ?></div>
-                                </td>
-                                <td>
-                                    <?= $s['jenis_kelamin'] === 'L' ? 'Laki-laki' : 'Perempuan' ?>
-                                </td>
+                                <td style="font-weight: 700; color: var(--color-text-main);" title="<?= e($s['nama_lengkap']) ?>"><?= e($s['nama_lengkap']) ?></td>
+                                <td><?= $s['jenis_kelamin'] === 'L' ? 'L' : 'P' ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -122,30 +118,30 @@
                 </div>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="data-table">
+                    <table class="data-table table-compact">
                         <thead>
                             <tr>
-                                <th>Hari & Jam</th>
-                                <th>Mata Pelajaran</th>
-                                <th>Guru Pengajar</th>
+                                <th style="width: 24%;">Hari & Jam</th>
+                                <th style="width: 42%;">Mapel</th>
+                                <th class="col-hide-sm" style="width: 34%;">Guru</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($jadwalKelas as $jdw): ?>
                                 <tr>
                                     <td>
-                                        <div style="font-weight: 700; color: var(--color-text-main);"><?= e($jdw['hari']) ?></div>
-                                        <div style="font-size: 11px; color: var(--color-text-muted); font-family: monospace;">
-                                            <?= \App\Helpers\Sanitizer::formatJam($jdw['jam_mulai']) ?>
+                                        <div class="cell-stack">
+                                            <div style="font-weight: 700; color: var(--color-text-main);"><?= e($jdw['hari']) ?></div>
+                                            <div style="color: var(--color-text-muted); font-family: monospace;"><?= \App\Helpers\Sanitizer::formatJam($jdw['jam_mulai']) ?></div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div style="font-weight: 700; color: var(--color-text-main);"><?= e($jdw['nama_mapel']) ?></div>
-                                        <div style="font-size: 11px; color: var(--color-accent);">
-                                            📍 <?= e($jdw['ruangan']) ?>
+                                        <div class="cell-stack">
+                                            <div style="font-weight: 700; color: var(--color-text-main);" title="<?= e($jdw['nama_mapel']) ?>"><?= e($jdw['nama_mapel']) ?></div>
+                                            <div style="color: var(--color-accent);" title="<?= e($jdw['ruangan']) ?>"><?= e($jdw['ruangan']) ?></div>
                                         </div>
                                     </td>
-                                    <td style="color: var(--color-secondary); font-size: 12.5px; font-weight: 500;">
+                                    <td class="col-hide-sm" style="color: var(--color-secondary); font-weight: 500;" title="<?= e($jdw['nama_guru']) ?>">
                                         <?= e($jdw['nama_guru']) ?>
                                     </td>
                                 </tr>
@@ -195,21 +191,19 @@
         </div>
         <div class="card-body" style="padding: 0;">
             <div class="table-responsive">
-                <table class="data-table">
+                <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th>Nama Siswa</th>
-                            <th style="text-align: center;">Sakit</th>
-                            <th style="text-align: center;">Izin</th>
-                            <th style="text-align: center;">Alfa</th>
+                            <th style="width: 46%;">Nama Siswa</th>
+                            <th style="width: 18%; text-align: center;">Sakit</th>
+                            <th style="width: 18%; text-align: center;">Izin</th>
+                            <th style="width: 18%; text-align: center;">Alfa</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($previewAbsen as $ab): ?>
                             <tr>
-                                <td>
-                                    <div style="font-weight: 700; color: var(--color-text-main);"><?= e($ab['nama_lengkap']) ?></div>
-                                </td>
+                                <td style="font-weight: 700; color: var(--color-text-main);" title="<?= e($ab['nama_lengkap']) ?>"><?= e($ab['nama_lengkap']) ?></td>
                                 <td style="text-align: center; font-weight: 600;"><?= (int)$ab['sakit'] ?></td>
                                 <td style="text-align: center; font-weight: 600;"><?= (int)$ab['izin'] ?></td>
                                 <td style="text-align: center; font-weight: 600;"><?= (int)$ab['alfa'] ?></td>
@@ -259,21 +253,19 @@
         </div>
         <div class="card-body" style="padding: 0;">
             <div class="table-responsive">
-                <table class="data-table">
+                <table class="data-table table-compact">
                     <thead>
                         <tr>
-                            <th>Nama Siswa</th>
-                            <th style="text-align: center;">Sakit</th>
-                            <th style="text-align: center;">Izin</th>
-                            <th style="text-align: center;">Alfa</th>
+                            <th style="width: 46%;">Nama Siswa</th>
+                            <th style="width: 18%; text-align: center;">Sakit</th>
+                            <th style="width: 18%; text-align: center;">Izin</th>
+                            <th style="width: 18%; text-align: center;">Alfa</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($previewAbsen as $ab): ?>
                             <tr>
-                                <td>
-                                    <div style="font-weight: 700; color: var(--color-text-main);"><?= e($ab['nama_lengkap']) ?></div>
-                                </td>
+                                <td style="font-weight: 700; color: var(--color-text-main);" title="<?= e($ab['nama_lengkap']) ?>"><?= e($ab['nama_lengkap']) ?></td>
                                 <td style="text-align: center; font-weight: 600;"><?= (int)$ab['sakit'] ?></td>
                                 <td style="text-align: center; font-weight: 600;"><?= (int)$ab['izin'] ?></td>
                                 <td style="text-align: center; font-weight: 600;"><?= (int)$ab['alfa'] ?></td>

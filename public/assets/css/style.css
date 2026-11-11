@@ -416,6 +416,7 @@ body {
 
 .page-content .card,
 .page-content .grid-2,
+.page-content .grid-3,
 .page-content .grid-4 {
     max-width: 100%;
     min-width: 0;
