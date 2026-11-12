@@ -124,8 +124,12 @@
                     WhatsApp dikirim ke nomor orang tua untuk status yang berubah (Hadir, Izin, Sakit, Tidak Hadir).
                 </div>
                 <label style="display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.55rem; font-size: 12.5px; color: var(--color-text-body);">
-                    <input type="checkbox" name="kirim_ulang_wa" value="1">
-                    Kirim ulang WhatsApp untuk semua siswa (termasuk yang tidak berubah)
+                    <input type="checkbox" name="kirim_ulang_wa" value="1" checked>
+                    Kirim WhatsApp ke orang tua untuk semua siswa (Hadir / Izin / Sakit / Tidak Hadir)
+                </label>
+                <label style="display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.35rem; font-size: 12.5px; color: var(--color-text-muted);">
+                    <input type="checkbox" name="lewati_wa" value="1">
+                    Simpan saja tanpa kirim WhatsApp
                 </label>
             </div>
             <button type="submit" class="btn btn-primary" id="btnSimpanPresensi">
@@ -189,6 +193,15 @@ document.querySelectorAll('.presensi-chip').forEach((chip) => {
 const formPresensi = document.getElementById('formPresensiKelas');
 if (formPresensi) {
     formPresensi.addEventListener('submit', function () {
+        // Pastikan nilai hidden sinkron dengan chip aktif sebelum POST
+        document.querySelectorAll('.presensi-touchbar').forEach((bar) => {
+            const aktif = bar.querySelector('.presensi-chip.is-active');
+            const hidden = bar.querySelector('.presensi-value');
+            if (aktif && hidden) {
+                hidden.value = aktif.getAttribute('data-value') || hidden.value;
+            }
+        });
+
         const btn = document.getElementById('btnSimpanPresensi');
         if (btn) {
             btn.disabled = true;
@@ -196,4 +209,9 @@ if (formPresensi) {
         }
     });
 }
+
+// Samakan warna awal dengan status tersimpan
+document.querySelectorAll('.presensi-value').forEach((input) => {
+    setPresensi(input.dataset.idSiswa, input.value);
+});
 </script>

@@ -110,6 +110,7 @@ class WaliKelasController extends Controller {
         $tersimpan = 0;
         $waOk = 0;
         $waGagal = 0;
+        $contohGagalWa = '';
         $idPengguna = (int)Session::get('pengguna_id');
         $kirimUlang = isset($_POST['kirim_ulang_wa']);
 
@@ -133,8 +134,10 @@ class WaliKelasController extends Controller {
 
             $statusLama = $presensiLama[$idSiswa] ?? null;
             $berubah = $statusLama === null || $statusLama !== $statusBaru;
-            // Selalu kirim WA saat status berubah, atau jika user centang kirim ulang
-            $perluWa = $berubah || $kirimUlang;
+            // Default: kirim WA untuk SEMUA status (hadir/izin/sakit/tidak_hadir)
+            // saat berubah. Centang "kirim ulang" untuk kirim lagi meski tidak berubah.
+            $lewatiWa = isset($_POST['lewati_wa']);
+            $perluWa = !$lewatiWa && ($berubah || $kirimUlang);
             $siswa = $mapSiswa[$idSiswa];
 
             if ($perluWa) {
@@ -152,6 +155,9 @@ class WaliKelasController extends Controller {
                     $waOk++;
                 } else {
                     $waGagal++;
+                    if (($contohGagalWa ?? '') === '') {
+                        $contohGagalWa = (string)($hasil['wa_message'] ?? $hasil['wa_status'] ?? 'gagal');
+                    }
                 }
 
                 Audit::catat(
@@ -167,19 +173,23 @@ class WaliKelasController extends Controller {
                 );
 
                 // Jeda antar nomor agar Fonnte tidak membuang pesan massal
-                usleep(350000);
+                usleep(450000);
             } else {
                 $this->modelPresensi->setStatusSaja($idSiswa, $statusBaru, $idPengguna);
+                if ($berubah) {
+                    $tersimpan++;
+                }
             }
         }
 
-        if ($tersimpan === 0) {
+        if ($tersimpan === 0 && $waOk === 0 && $waGagal === 0) {
             Session::setFlash('success', 'Tidak ada perubahan kehadiran. Centang "Kirim ulang WhatsApp" jika ingin mengirim lagi.');
         } else {
-            Session::setFlash(
-                'success',
-                "Presensi diproses untuk {$tersimpan} siswa. WhatsApp: {$waOk} terkirim, {$waGagal} gagal."
-            );
+            $pesan = "Presensi diproses. WhatsApp: {$waOk} terkirim, {$waGagal} gagal (Hadir/Izin/Sakit/Tidak Hadir).";
+            if ($waGagal > 0 && ($contohGagalWa ?? '') !== '') {
+                $pesan .= ' Penyebab: ' . mb_substr($contohGagalWa, 0, 160);
+            }
+            Session::setFlash($waOk > 0 ? 'success' : 'error', $pesan);
         }
 
         $this->redirect('/wali-kelas/siswa');

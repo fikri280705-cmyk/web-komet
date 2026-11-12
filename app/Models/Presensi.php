@@ -112,9 +112,17 @@ class Presensi extends Model {
 
         $tanggalLabel = date('d M Y');
         $statusLabel = self::labelStatus($status);
+        $keterangan = match ($status) {
+            'hadir' => 'hadir mengikuti kegiatan belajar di sekolah',
+            'izin' => 'izin tidak masuk sekolah',
+            'sakit' => 'tidak masuk sekolah karena sakit',
+            'tidak_hadir' => 'tidak hadir di sekolah tanpa keterangan',
+            default => 'berstatus ' . strtolower($statusLabel) . ' di sekolah',
+        };
         $pesanOrtu = "Yth. Bapak/Ibu Orang Tua/Wali dari {$namaSiswa}.\n\n"
-            . "Kami informasikan bahwa putra/putri Anda dinyatakan {$statusLabel} "
-            . "di sekolah pada {$tanggalLabel}.\n"
+            . "Informasi kehadiran hari ini ({$tanggalLabel}):\n"
+            . "Status: {$statusLabel}\n"
+            . "Keterangan: putra/putri Anda {$keterangan}.\n"
             . "Kelas: {$namaKelas}\n\n"
             . "Pesan otomatis dari Wali Kelas SMKN 9 Kabupaten Tangerang.";
 
