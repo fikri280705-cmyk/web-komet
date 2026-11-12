@@ -152,7 +152,9 @@ function setPresensi(idSiswa, value) {
     if (!bar) return;
 
     bar.querySelectorAll('.presensi-chip').forEach((chip) => {
-        chip.classList.toggle('is-active', chip.dataset.value === value);
+        const aktif = chip.getAttribute('data-value') === value;
+        chip.classList.toggle('is-active', aktif);
+        chip.setAttribute('aria-pressed', aktif ? 'true' : 'false');
     });
 }
 
