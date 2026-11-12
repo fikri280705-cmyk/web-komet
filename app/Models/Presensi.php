@@ -1,6 +1,6 @@
 <?php
 /**
- * Model Presensi Harian Siswa (toggle hadir / tidak hadir)
+ * Model Presensi Harian Siswa (hadir / izin / sakit / tidak hadir)
  */
 
 namespace App\Models;
@@ -9,6 +9,18 @@ use App\Core\Model;
 use App\Services\WhatsappService;
 
 class Presensi extends Model {
+    public const STATUS_VALID = ['hadir', 'izin', 'sakit', 'tidak_hadir'];
+
+    public static function labelStatus(string $status): string {
+        return match ($status) {
+            'hadir' => 'HADIR',
+            'izin' => 'IZIN',
+            'sakit' => 'SAKIT',
+            'tidak_hadir' => 'TIDAK HADIR',
+            default => strtoupper($status),
+        };
+    }
+
     public function ambilMapStatusKelasHariIni(int $idKelas, ?string $tanggal = null): array {
         $tanggal = $tanggal ?: date('Y-m-d');
 
@@ -33,7 +45,7 @@ class Presensi extends Model {
     }
 
     public function setStatusSaja(int $idSiswa, string $status, int $idPenggunaPencatat): void {
-        if (!in_array($status, ['hadir', 'tidak_hadir'], true)) {
+        if (!in_array($status, self::STATUS_VALID, true)) {
             return;
         }
 
@@ -70,7 +82,7 @@ class Presensi extends Model {
         ?string $teleponOrtu,
         ?string $teleponSiswa = null
     ): array {
-        if (!in_array($status, ['hadir', 'tidak_hadir'], true)) {
+        if (!in_array($status, self::STATUS_VALID, true)) {
             return [
                 'ok' => false,
                 'status' => $status,
@@ -99,7 +111,7 @@ class Presensi extends Model {
         ]);
 
         $tanggalLabel = date('d M Y');
-        $statusLabel = $status === 'hadir' ? 'HADIR' : 'TIDAK HADIR';
+        $statusLabel = self::labelStatus($status);
         $pesanOrtu = "Yth. Bapak/Ibu Orang Tua/Wali dari {$namaSiswa}.\n\n"
             . "Kami informasikan bahwa putra/putri Anda dinyatakan {$statusLabel} "
             . "di sekolah pada {$tanggalLabel}.\n"

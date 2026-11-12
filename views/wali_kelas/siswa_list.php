@@ -6,7 +6,7 @@
             <span class="badge badge-info">Presensi <?= date('d M Y', strtotime($tanggalPresensi ?? 'now')) ?></span>
         </div>
         <h1 class="page-title">Siswa Kelas Binaan <?= e($kelas['nama_kelas']) ?></h1>
-        <p class="page-subtitle">Pilih touchbar Hadir atau Tidak Hadir per siswa, lalu tekan Simpan. WhatsApp dikirim ke nomor orang tua saat status berubah.</p>
+        <p class="page-subtitle">Pilih touchbar Hadir / Izin / Sakit / Tidak Hadir per siswa, lalu tekan Simpan. WhatsApp dikirim ke nomor orang tua saat status berubah.</p>
     </div>
 </div>
 
@@ -19,8 +19,10 @@
                 <input type="text" id="cariSiswa" class="form-control" placeholder="Cari nama siswa, NIS..." style="font-size: 13px;" onkeyup="filterSiswa()">
             </div>
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
-                <button type="button" class="btn btn-outline btn-sm" onclick="setSemuaPresensi('1')">Semua Hadir</button>
-                <button type="button" class="btn btn-outline btn-sm" onclick="setSemuaPresensi('0')">Semua Tidak Hadir</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="setSemuaPresensi('hadir')">Semua Hadir</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="setSemuaPresensi('izin')">Semua Izin</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="setSemuaPresensi('sakit')">Semua Sakit</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="setSemuaPresensi('tidak_hadir')">Semua Tidak Hadir</button>
                 <span class="badge badge-neutral">Total: <?= count($daftarSiswa) ?> Siswa Terdaftar</span>
             </div>
         </div>
@@ -37,7 +39,7 @@
                             <th>Kontak & Orang Tua</th>
                             <th>Alamat Domisili</th>
                             <th style="text-align: center;">Status</th>
-                            <th style="text-align: center; min-width: 140px;">Kehadiran Hari Ini</th>
+                            <th style="text-align: center; min-width: 280px;">Kehadiran Hari Ini</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,7 +54,9 @@
                                 <?php
                                     $idSiswa = (int)$s['id'];
                                     $statusHariIni = $presensiHariIni[$idSiswa] ?? 'tidak_hadir';
-                                    $isHadir = $statusHariIni === 'hadir';
+                                    if (!in_array($statusHariIni, ['hadir', 'izin', 'sakit', 'tidak_hadir'], true)) {
+                                        $statusHariIni = 'tidak_hadir';
+                                    }
                                 ?>
                                 <tr class="baris-siswa">
                                     <td style="text-align: center; color: var(--color-text-muted); font-weight: 600;"><?= $idx++ ?></td>
@@ -94,21 +98,13 @@
                                                 type="hidden"
                                                 class="presensi-value"
                                                 name="presensi[<?= $idSiswa ?>]"
-                                                value="<?= $isHadir ? '1' : '0' ?>"
+                                                value="<?= e($statusHariIni) ?>"
                                                 data-id-siswa="<?= $idSiswa ?>"
                                             >
-                                            <button
-                                                type="button"
-                                                class="presensi-chip chip-hadir <?= $isHadir ? 'is-active' : '' ?>"
-                                                data-value="1"
-                                                data-id-siswa="<?= $idSiswa ?>"
-                                            >Hadir</button>
-                                            <button
-                                                type="button"
-                                                class="presensi-chip chip-alfa <?= !$isHadir ? 'is-active' : '' ?>"
-                                                data-value="0"
-                                                data-id-siswa="<?= $idSiswa ?>"
-                                            >Tidak Hadir</button>
+                                            <button type="button" class="presensi-chip chip-hadir <?= $statusHariIni === 'hadir' ? 'is-active' : '' ?>" data-value="hadir" data-id-siswa="<?= $idSiswa ?>">Hadir</button>
+                                            <button type="button" class="presensi-chip chip-izin <?= $statusHariIni === 'izin' ? 'is-active' : '' ?>" data-value="izin" data-id-siswa="<?= $idSiswa ?>">Izin</button>
+                                            <button type="button" class="presensi-chip chip-sakit <?= $statusHariIni === 'sakit' ? 'is-active' : '' ?>" data-value="sakit" data-id-siswa="<?= $idSiswa ?>">Sakit</button>
+                                            <button type="button" class="presensi-chip chip-alfa <?= $statusHariIni === 'tidak_hadir' ? 'is-active' : '' ?>" data-value="tidak_hadir" data-id-siswa="<?= $idSiswa ?>">Tidak Hadir</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -125,7 +121,7 @@
             <div>
                 <div style="font-weight: 700; color: var(--color-text-main);">Simpan Kehadiran Hari Ini</div>
                 <div style="font-size: 12.5px; color: var(--color-text-muted); margin-top: 2px;">
-                    WhatsApp dikirim ke nomor orang tua untuk status yang berubah (Hadir maupun Tidak Hadir).
+                    WhatsApp dikirim ke nomor orang tua untuk status yang berubah (Hadir, Izin, Sakit, Tidak Hadir).
                 </div>
                 <label style="display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.55rem; font-size: 12.5px; color: var(--color-text-body);">
                     <input type="checkbox" name="kirim_ulang_wa" value="1">

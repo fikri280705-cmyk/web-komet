@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `presensi_harian` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_siswa` INT NOT NULL,
   `tanggal` DATE NOT NULL,
-  `status` ENUM('hadir','tidak_hadir') NOT NULL DEFAULT 'tidak_hadir',
+  `status` ENUM('hadir','izin','sakit','tidak_hadir') NOT NULL DEFAULT 'tidak_hadir',
   `dicatat_oleh_id_pengguna` INT NULL,
   `status_whatsapp` VARCHAR(30) NOT NULL DEFAULT 'belum',
   `respon_whatsapp` TEXT NULL,
@@ -16,3 +16,6 @@ CREATE TABLE IF NOT EXISTS `presensi_harian` (
   CONSTRAINT `fk_presensi_siswa` FOREIGN KEY (`id_siswa`) REFERENCES `siswa` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_presensi_pengguna` FOREIGN KEY (`dicatat_oleh_id_pengguna`) REFERENCES `pengguna` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `presensi_harian`
+  MODIFY `status` ENUM('hadir','izin','sakit','tidak_hadir') NOT NULL DEFAULT 'tidak_hadir';

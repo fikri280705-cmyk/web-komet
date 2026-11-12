@@ -651,12 +651,13 @@ textarea.form-control {
 .presensi-touchbar {
     display: inline-flex;
     align-items: center;
-    gap: 0;
+    gap: 2px;
     padding: 3px;
     background: #F1F5F9;
     border: 1px solid #E2E8F0;
     border-radius: 999px;
-    min-width: 176px;
+    min-width: 268px;
+    max-width: 100%;
 }
 
 .presensi-chip {
@@ -664,10 +665,10 @@ textarea.form-control {
     border: 0;
     background: transparent;
     color: #64748B;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
     line-height: 1;
-    padding: 0.55rem 0.7rem;
+    padding: 0.5rem 0.45rem;
     border-radius: 999px;
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
@@ -678,6 +679,18 @@ textarea.form-control {
     background: #16A34A;
     color: #FFFFFF;
     box-shadow: 0 1px 2px rgba(22, 163, 74, 0.35);
+}
+
+.presensi-chip.chip-izin.is-active {
+    background: #2563EB;
+    color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(37, 99, 235, 0.35);
+}
+
+.presensi-chip.chip-sakit.is-active {
+    background: #D97706;
+    color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(217, 119, 6, 0.35);
 }
 
 .presensi-chip.chip-alfa.is-active {

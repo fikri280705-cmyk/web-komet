@@ -119,14 +119,17 @@ class WaliKelasController extends Controller {
                 continue;
             }
 
-            // Terima 1/0, "hadir"/"tidak_hadir", atau array dari duplikat input form
+            // Terima hadir/izin/sakit/tidak_hadir (atau 1/0 kompatibilitas lama)
             if (is_array($nilai)) {
                 $nilai = end($nilai);
             }
             $nilaiNorm = strtolower(trim((string)$nilai));
-            $statusBaru = in_array($nilaiNorm, ['1', 'hadir', 'on', 'true'], true)
-                ? 'hadir'
-                : 'tidak_hadir';
+            $statusBaru = match ($nilaiNorm) {
+                '1', 'hadir', 'on', 'true' => 'hadir',
+                'izin' => 'izin',
+                'sakit' => 'sakit',
+                default => 'tidak_hadir',
+            };
 
             $statusLama = $presensiLama[$idSiswa] ?? null;
             $berubah = $statusLama === null || $statusLama !== $statusBaru;
