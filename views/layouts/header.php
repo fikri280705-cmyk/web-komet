@@ -9,9 +9,9 @@
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>/assets/images/logosmkn9.png">
 
     <!-- CSS Layers Terpisah -->
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/components.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/responsive.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css?v=20261112b">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/components.css?v=20261112b">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/responsive.css?v=20261112b">
 </head>
 <body>
 <div class="sidebar-overlay"></div>
