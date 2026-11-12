@@ -145,6 +145,13 @@ function filterSiswa() {
     });
 }
 
+const WARNA_PRESENSI = {
+    hadir: { bg: '#16A34A', fg: '#FFFFFF' },
+    izin: { bg: '#2563EB', fg: '#FFFFFF' },
+    sakit: { bg: '#D97706', fg: '#FFFFFF' },
+    tidak_hadir: { bg: '#DC2626', fg: '#FFFFFF' }
+};
+
 function setPresensi(idSiswa, value) {
     const valueInput = document.querySelector('.presensi-value[data-id-siswa="' + idSiswa + '"]');
     const bar = document.querySelector('.presensi-touchbar[data-id-siswa="' + idSiswa + '"]');
@@ -152,9 +159,18 @@ function setPresensi(idSiswa, value) {
     if (!bar) return;
 
     bar.querySelectorAll('.presensi-chip').forEach((chip) => {
-        const aktif = chip.getAttribute('data-value') === value;
+        const status = chip.getAttribute('data-value');
+        const aktif = status === value;
         chip.classList.toggle('is-active', aktif);
         chip.setAttribute('aria-pressed', aktif ? 'true' : 'false');
+
+        if (aktif && WARNA_PRESENSI[status]) {
+            chip.style.backgroundColor = WARNA_PRESENSI[status].bg;
+            chip.style.color = WARNA_PRESENSI[status].fg;
+        } else {
+            chip.style.backgroundColor = 'transparent';
+            chip.style.color = '#64748B';
+        }
     });
 }
 
