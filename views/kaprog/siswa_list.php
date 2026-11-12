@@ -33,6 +33,7 @@
                         <th style="width: 45px; text-align: center;">No</th>
                         <th>NIS / NISN</th>
                         <th>Nama Lengkap Siswa</th>
+                        <th>No. Ortu / WA</th>
                         <th>Kelas</th>
                         <th style="text-align: center;">Jenis Kelamin</th>
                         <th style="text-align: center;">Tahun Masuk</th>
@@ -42,7 +43,7 @@
                 <tbody>
                     <?php if (empty($daftarSiswa)): ?>
                         <tr>
-                            <td colspan="7" style="text-align: center; padding: 3rem 1.5rem; color: var(--color-text-muted);">
+                            <td colspan="8" style="text-align: center; padding: 3rem 1.5rem; color: var(--color-text-muted);">
                                 Tidak ada data siswa pada filter ini.
                             </td>
                         </tr>
@@ -57,6 +58,14 @@
                                 <td>
                                     <div style="font-weight: 700; color: var(--color-text-main);"><?= e($s['nama_lengkap']) ?></div>
                                     <div style="font-size: 11px; color: var(--color-text-muted);"><?= e($s['alamat'] ?? 'Kabupaten Tangerang') ?></div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 700; font-family: monospace; font-size: 12.5px; color: var(--color-text-main);">
+                                        <?= e($s['telepon_orang_tua'] ?: '-') ?>
+                                    </div>
+                                    <div style="font-size: 11px; color: var(--color-text-muted);">
+                                        Siswa: <?= e($s['nomor_telepon'] ?: '-') ?>
+                                    </div>
                                 </td>
                                 <td>
                                     <span class="badge badge-info" style="font-weight: 700;"><?= e($s['nama_kelas'] ?? '-') ?></span>

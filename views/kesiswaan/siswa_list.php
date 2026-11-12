@@ -48,6 +48,7 @@
                         <th style="width: 45px; text-align: center;">No</th>
                         <th>NIS / NISN</th>
                         <th>Nama Siswa & Identitas</th>
+                        <th>No. Ortu / WA</th>
                         <th>Konsentrasi Keahlian</th>
                         <th>Kelas</th>
                         <th class="col-tahun" style="text-align: center;">Tahun Masuk</th>
@@ -58,7 +59,7 @@
                 <tbody>
                     <?php if (empty($daftarSiswa)): ?>
                         <tr>
-                            <td colspan="8" style="text-align: center; padding: 3rem 1.5rem; color: var(--color-text-muted);">
+                            <td colspan="9" style="text-align: center; padding: 3rem 1.5rem; color: var(--color-text-muted);">
                                 Data siswa tidak ditemukan.
                             </td>
                         </tr>
@@ -88,6 +89,14 @@
                                                 <?php endif; ?>
                                             </div>
                                         </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 700; color: var(--color-text-main); font-family: monospace; font-size: 12.5px;">
+                                        <?= e($s['telepon_orang_tua'] ?: '-') ?>
+                                    </div>
+                                    <div style="font-size: 11px; color: var(--color-text-muted);">
+                                        Siswa: <?= e($s['nomor_telepon'] ?: '-') ?>
                                     </div>
                                 </td>
                                 <td>
@@ -223,8 +232,12 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">No. Telepon</label>
-                    <input type="text" name="nomor_telepon" class="form-control">
+                    <label class="form-label">No. Telepon Siswa</label>
+                    <input type="text" name="nomor_telepon" class="form-control" placeholder="08xxxxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">No. Telepon Orang Tua / WA *</label>
+                    <input type="text" name="telepon_orang_tua" class="form-control" required placeholder="08xxxxxxxxxx">
                 </div>
                 <div class="form-group" style="grid-column: 1 / -1;">
                     <label class="form-label">Alamat</label>

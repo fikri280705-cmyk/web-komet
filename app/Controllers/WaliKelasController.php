@@ -11,6 +11,7 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Jadwal;
 use App\Models\Nilai;
+use App\Models\Presensi;
 use App\Helpers\Session;
 use App\Helpers\Audit;
 
@@ -19,12 +20,14 @@ class WaliKelasController extends Controller {
     private Siswa $modelSiswa;
     private Jadwal $modelJadwal;
     private Nilai $modelNilai;
+    private Presensi $modelPresensi;
 
     public function __construct() {
         $this->modelKelas = new Kelas();
         $this->modelSiswa = new Siswa();
         $this->modelJadwal = new Jadwal();
         $this->modelNilai = new Nilai();
+        $this->modelPresensi = new Presensi();
     }
 
     private function getKelasBinaan(): array {
@@ -69,15 +72,114 @@ class WaliKelasController extends Controller {
         $kelasBinaan = $this->getKelasBinaan();
         $idKelas = (int)$kelasBinaan['id'];
         $daftarSiswa = $this->modelSiswa->ambilBerdasarkanKelas($idKelas);
+        $presensiHariIni = $this->modelPresensi->ambilMapStatusKelasHariIni($idKelas);
 
         $data = [
             'judulHalaman' => "Siswa Kelas Binaan {$kelasBinaan['nama_kelas']}",
             'user'         => Session::user(),
             'kelas'        => $kelasBinaan,
-            'daftarSiswa'  => $daftarSiswa
+            'daftarSiswa'  => $daftarSiswa,
+            'presensiHariIni' => $presensiHariIni,
+            'tanggalPresensi' => date('Y-m-d'),
         ];
 
         $this->render('wali_kelas/siswa_list', $data);
+    }
+
+    /**
+     * Simpan batch kehadiran harian siswa binaan + WA ke orang tua
+     */
+    public function simpanPresensiKelas(): void {
+        $kelasBinaan = $this->getKelasBinaan();
+        $idKelas = (int)$kelasBinaan['id'];
+        $daftarSiswa = $this->modelSiswa->ambilBerdasarkanKelas($idKelas);
+        $presensiLama = $this->modelPresensi->ambilMapStatusKelasHariIni($idKelas);
+        $inputPresensi = $_POST['presensi'] ?? [];
+
+        if (!is_array($inputPresensi) || $inputPresensi === []) {
+            Session::setFlash('error', 'Tidak ada data kehadiran yang dikirim.');
+            $this->redirect('/wali-kelas/siswa');
+            return;
+        }
+
+        $mapSiswa = [];
+        foreach ($daftarSiswa as $row) {
+            $mapSiswa[(int)$row['id']] = $row;
+        }
+
+        $tersimpan = 0;
+        $waOk = 0;
+        $waGagal = 0;
+        $idPengguna = (int)Session::get('pengguna_id');
+        $kirimUlang = isset($_POST['kirim_ulang_wa']);
+
+        foreach ($inputPresensi as $idSiswaInput => $nilai) {
+            $idSiswa = filter_var($idSiswaInput, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+            if ($idSiswa === false || !isset($mapSiswa[$idSiswa])) {
+                continue;
+            }
+
+            // Terima 1/0, "hadir"/"tidak_hadir", atau array dari duplikat input form
+            if (is_array($nilai)) {
+                $nilai = end($nilai);
+            }
+            $nilaiNorm = strtolower(trim((string)$nilai));
+            $statusBaru = in_array($nilaiNorm, ['1', 'hadir', 'on', 'true'], true)
+                ? 'hadir'
+                : 'tidak_hadir';
+
+            $statusLama = $presensiLama[$idSiswa] ?? null;
+            $berubah = $statusLama === null || $statusLama !== $statusBaru;
+            // Selalu kirim WA saat status berubah, atau jika user centang kirim ulang
+            $perluWa = $berubah || $kirimUlang;
+            $siswa = $mapSiswa[$idSiswa];
+
+            if ($perluWa) {
+                $hasil = $this->modelPresensi->setStatusDanKirimWa(
+                    $idSiswa,
+                    $statusBaru,
+                    $idPengguna,
+                    (string)$siswa['nama_lengkap'],
+                    (string)$kelasBinaan['nama_kelas'],
+                    $siswa['telepon_orang_tua'] ?? null,
+                    $siswa['nomor_telepon'] ?? null
+                );
+                $tersimpan++;
+                if ($hasil['wa_ok']) {
+                    $waOk++;
+                } else {
+                    $waGagal++;
+                }
+
+                Audit::catat(
+                    'PRESENSI_HARIAN',
+                    'presensi_harian',
+                    $idSiswa,
+                    $statusLama ? ['status' => $statusLama] : null,
+                    [
+                        'status' => $statusBaru,
+                        'tanggal' => date('Y-m-d'),
+                        'wa_status' => $hasil['wa_status'],
+                    ]
+                );
+
+                // Jeda antar nomor agar Fonnte tidak membuang pesan massal
+                usleep(350000);
+            } else {
+                $this->modelPresensi->setStatusSaja($idSiswa, $statusBaru, $idPengguna);
+            }
+        }
+
+        if ($tersimpan === 0) {
+            Session::setFlash('success', 'Tidak ada perubahan kehadiran. Centang "Kirim ulang WhatsApp" jika ingin mengirim lagi.');
+        } else {
+            Session::setFlash(
+                'success',
+                "Presensi diproses untuk {$tersimpan} siswa. WhatsApp: {$waOk} terkirim, {$waGagal} gagal."
+            );
+        }
+
+        $this->redirect('/wali-kelas/siswa');
     }
 
     /**

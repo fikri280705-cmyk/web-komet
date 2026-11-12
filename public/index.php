@@ -250,6 +250,11 @@ $router->get('/wali-kelas/siswa', [WaliKelasController::class, 'siswaBinaan'], [
     AuthMiddleware::class,
     RoleMiddleware::izinkan(['wali_kelas'])
 ]);
+$router->post('/wali-kelas/siswa/presensi', [WaliKelasController::class, 'simpanPresensiKelas'], [
+    AuthMiddleware::class,
+    RoleMiddleware::izinkan(['wali_kelas']),
+    CsrfMiddleware::class
+]);
 $router->get('/wali-kelas/jadwal', [WaliKelasController::class, 'jadwalPelajaran'], [
     AuthMiddleware::class,
     RoleMiddleware::izinkan(['wali_kelas'])

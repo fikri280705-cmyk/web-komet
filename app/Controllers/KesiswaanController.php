@@ -11,6 +11,7 @@ use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\Jurusan;
 use App\Models\Event;
+use App\Models\Pesan;
 use App\Models\Jadwal;
 use App\Models\Pengguna;
 use App\Helpers\Session;
@@ -499,7 +500,17 @@ class KesiswaanController extends Controller {
         $idEvent = (int)($_POST['id_event'] ?? 0);
         if ($idEvent) {
             if ($this->modelEvent->setujuiEvent($idEvent, (int)Session::get('pengguna_id'))) {
-                Session::setFlash('success', 'Event berhasil disetujui dan dipublikasikan di Mading Siswa!');
+                $event = $this->modelEvent->cariBerdasarkanId($idEvent);
+                $ringkasan = ['db' => 0, 'wa_ok' => 0, 'wa_gagal' => 0];
+                if ($event) {
+                    $ringkasan = (new Pesan())->kirimOtomatisEventKeSemuaSiswa($event);
+                }
+                Session::setFlash(
+                    'success',
+                    'Event berhasil disetujui dan dipublikasikan di Mading Siswa!'
+                    . " Notifikasi dibuat untuk {$ringkasan['db']} siswa."
+                    . " WhatsApp: {$ringkasan['wa_ok']} terkirim/antrian, {$ringkasan['wa_gagal']} gagal."
+                );
             } else {
                 Session::setFlash('error', 'Event tidak ditemukan atau statusnya sudah berubah.');
             }

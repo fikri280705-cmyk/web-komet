@@ -50,7 +50,6 @@ class SiswaController extends Controller {
         $profil = $this->getProfilSiswa();
         $idSiswa = (int)$profil['id'];
         $idKelas = (int)($profil['id_kelas_aktif'] ?? 1);
-
         $nilaiFinal = $this->modelNilai->ambilNilaiFinalSiswa($idSiswa);
         $jadwalKelas = $this->modelJadwal->ambilBerdasarkanKelas($idKelas);
         $eventTerbaru = $this->modelEvent->ambilEventPublik();
@@ -63,7 +62,7 @@ class SiswaController extends Controller {
             'nilaiFinal'    => array_slice($nilaiFinal, 0, 5),
             'jadwalKelas'   => array_slice($jadwalKelas, 0, 5),
             'eventTerbaru'  => array_slice($eventTerbaru, 0, 3),
-            'kehadiran'     => $kehadiran
+            'kehadiran'     => $kehadiran,
         ];
 
         $this->render('siswa/dashboard', $data);
